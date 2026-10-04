@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ComicCraft — AI Comic Story Creator</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body class="landing-body">
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">✦</span> ComicCraft</div>
+    <span class="brand-sub">AI Comic Story Creator</span>
+  </header>
+
+  <main class="landing-wrap">
+    <section class="hero-copy">
+      <div class="eyebrow">CREATE • ANIMATE • SHARE</div>
+      <h1>Turn your idea into a<br><span>moving comic story.</span></h1>
+      <p>Write a simple prompt and ComicCraft builds a five-panel comic with narration, dialogue and cinematic panel transitions.</p>
+    </section>
+
+    <section class="creator-card">
+      <div class="card-heading">
+        <div>
+          <div class="mini-label">YOUR STORY</div>
+          <h2>Create a new comic</h2>
+        </div>
+        <div class="five-panels">5 PANELS</div>
+      </div>
+
+      {% if error %}
+      <div class="error-box">{{ error }}</div>
+      {% endif %}
+
+      <form action="/generate" method="post" class="comic-form">
+        <label>Story prompt
+          <textarea name="story_prompt" required minlength="3" maxlength="2000" placeholder="Example: A young explorer discovers a glowing doorway in a magical forest...">A young explorer discovers a glowing doorway in a magical forest</textarea>
+        </label>
+
+        <div class="form-grid">
+          <label>Character name
+            <input name="character_name" required value="Maya" placeholder="Maya" />
+          </label>
+          <label>Setting
+            <input name="setting" required value="Enchanted Forest" placeholder="Enchanted Forest" />
+          </label>
+          <label>Tone
+            <select name="tone">
+              <option>Adventure</option><option>Funny</option><option>Emotional</option><option>Mystery</option><option>Inspirational</option>
+            </select>
+          </label>
+          <label>Art style
+            <select name="art_style">
+              <option>Anime</option><option>Comic Book</option><option>Watercolor</option><option>3D Cartoon</option><option>Cinematic</option>
+            </select>
+          </label>
+        </div>
+
+        <button class="create-btn" type="submit">
+          <span>Generate Comic</span><span class="arrow">→</span>
+        </button>
+      </form>
+    </section>
+
+    <div class="feature-row">
+      <span>✦ AI STORY</span><span>✦ 5 PANELS</span><span>✦ CINEMATIC MOTION</span><span>✦ PDF EXPORT</span>
+    </div>
+  </main>
+</body>
+</html>

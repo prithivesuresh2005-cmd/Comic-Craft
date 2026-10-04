@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Comic — ComicCraft</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+
+<style>
+.video-caption {
+    width: 90%;
+    max-width: 1000px;
+    min-height: 100px;
+    margin: 18px auto;
+    padding: 22px 30px;
+    font-size: 38px;
+    font-weight: 700;
+    line-height: 1.4;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.78);
+    color: white;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+</style>  
+</head>
+<body class="reel-body">
+  <div class="reel-bg"></div>
+  <div class="reel-shade"></div>
+
+  <header class="reel-topbar">
+    <a class="back-link" href="/">← Create another</a>
+    <div class="reel-brand">✦ ComicCraft</div>
+    <a class="pdf-link" href="{{ pdf_url }}">Download PDF ↓</a>
+  </header>
+
+  <main class="reel-stage">
+    <div class="reel-title">
+      <span>YOUR COMIC</span>
+      <h1>Story in Motion</h1>
+    </div>
+
+    <!-- REAL MP4 MOTION VIDEO -->
+    <section class="video-card">
+      <video id="comicVideo" class="comic-video" controls autoplay muted playsinline preload="auto">
+        <source src="{{ video_url }}" type="video/mp4">
+        Your browser does not support MP4 video.
+      </video>
+      <div class="video-caption">AI Motion Comic • 5 scenes • Cinematic movement</div>
+    </section>
+
+    <div class="reel-controls">
+      <button id="prevBtn" class="round-btn" aria-label="Previous">‹</button>
+      <button id="playBtn" class="play-btn" aria-label="Pause">
+        <span id="playIcon">Ⅱ</span><span id="playText">Pause</span>
+      </button>
+      <button id="nextBtn" class="round-btn" aria-label="Next">›</button>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
+      <div class="progress-meta">
+        <span id="panelLabel">Panel 1 of {{ layout|length }}</span>
+        <span>Motion video</span>
+      </div>
+    </div>
+
+    <section class="panel-strip">
+      {% for p in layout %}
+      <button class="thumb" data-index="{{ loop.index0 }}" type="button">
+        <img src="{{ p.image }}" alt="{{ p.title }}">
+        <span>0{{ loop.index }}</span>
+      </button>
+      {% endfor %}
+    </section>
+  </main>
+
+<script>
+const video = document.getElementById("comicVideo");
+const playBtn = document.getElementById("playBtn");
+const playIcon = document.getElementById("playIcon");
+const playText = document.getElementById("playText");
+const progressBar = document.getElementById("progressBar");
+const panelLabel = document.getElementById("panelLabel");
+const totalPanels = 5;
+const panelSeconds = 3.2;
+
+function updateUI() {
+  if (!video.duration || !isFinite(video.duration)) return;
+  const pct = (video.currentTime / video.duration) * 100;
+  progressBar.style.width = pct + "%";
+  const panel = Math.min(totalPanels, Math.floor(video.currentTime / panelSeconds) + 1);
+  panelLabel.textContent = `Panel ${panel} of ${totalPanels}`;
+  playIcon.textContent = video.paused ? "▶" : "Ⅱ";
+  playText.textContent = video.paused ? "Play" : "Pause";
+}
+
+playBtn.addEventListener("click", () => {
+  if (video.paused) video.play();
+  else video.pause();
+});
+
+document.getElementById("prevBtn").addEventListener("click", () => {
+  video.currentTime = Math.max(0, video.currentTime - panelSeconds);
+  video.play();
+});
+
+document.getElementById("nextBtn").addEventListener("click", () => {
+  video.currentTime = Math.min(video.duration || 999999, video.currentTime + panelSeconds);
+  video.play();
+});
+
+document.querySelectorAll(".thumb").forEach(btn => {
+  btn.addEventListener("click", () => {
+    video.currentTime = Number(btn.dataset.index) * panelSeconds;
+    video.play();
+  });
+});
+
+video.addEventListener("timeupdate", updateUI);
+video.addEventListener("play", updateUI);
+video.addEventListener("pause", updateUI);
+video.addEventListener("loadedmetadata", updateUI);
+</script>
+</body>
+</html>
