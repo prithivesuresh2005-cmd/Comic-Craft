@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+jinja2
+python-multipart
+pydantic
+python-dotenv
+google-genai
+reportlab
+requests
+Pillow
+numpy
+imageio
+imageio-ffmpeg
